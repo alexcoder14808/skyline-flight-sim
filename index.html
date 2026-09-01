@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skyline Flight — Browser Flight Simulator</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<!-- ============ LOADING SCREEN ============ -->
+<div id="loading-screen" class="screen">
+    <div class="loading-inner">
+        <h1 class="brand">SKYLINE <span>FLIGHT</span></h1>
+        <div class="loading-status" id="loading-status">Loading aircraft...</div>
+        <div class="progress-track"><div class="progress-fill" id="loading-progress"></div></div>
+        <div class="loading-pct" id="loading-pct">0%</div>
+    </div>
+</div>
+
+<!-- ============ MAIN MENU ============ -->
+<div id="main-menu" class="screen hidden">
+    <div class="menu-panel">
+        <h1 class="brand">SKYLINE <span>FLIGHT</span></h1>
+        <p class="tagline">Browser-based flight simulator — V1</p>
+        <nav class="menu-nav">
+            <button id="btn-fly" class="menu-btn primary">FLY</button>
+            <button id="btn-flight-setup" class="menu-btn">FLIGHT SETUP</button>
+            <button id="btn-settings" class="menu-btn">SETTINGS</button>
+            <button id="btn-controls" class="menu-btn">CONTROLS</button>
+            <button id="btn-about" class="menu-btn">ABOUT</button>
+        </nav>
+    </div>
+</div>
+
+<!-- ============ FLIGHT SETUP ============ -->
+<div id="flight-setup-screen" class="screen hidden">
+    <div class="panel">
+        <h2>Flight Setup</h2>
+
+        <div class="setup-section">
+            <div class="setup-label">Aircraft</div>
+            <div class="option-row"><div class="option selected" data-fixed>Uploaded Aircraft (Twin-Jet Airliner)</div></div>
+        </div>
+
+        <div class="setup-section" data-group="startPosition">
+            <div class="setup-label">Starting Position</div>
+            <div class="option-row">
+                <div class="option" data-value="runway">Runway</div>
+                <div class="option" data-value="parking">Parking</div>
+            </div>
+        </div>
+
+        <div class="setup-section" data-group="timeOfDay">
+            <div class="setup-label">Time of Day</div>
+            <div class="option-row">
+                <div class="option" data-value="day">Day</div>
+                <div class="option" data-value="sunset">Sunset</div>
+                <div class="option" data-value="night">Night</div>
+            </div>
+        </div>
+
+        <div class="setup-section" data-group="weather">
+            <div class="setup-label">Weather</div>
+            <div class="option-row">
+                <div class="option" data-value="clear">Clear</div>
+                <div class="option" data-value="cloudy">Cloudy</div>
+            </div>
+        </div>
+
+        <div class="setup-section" data-group="wind">
+            <div class="setup-label">Wind</div>
+            <div class="option-row">
+                <div class="option" data-value="calm">Calm</div>
+                <div class="option" data-value="light">Light</div>
+                <div class="option" data-value="moderate">Moderate</div>
+            </div>
+        </div>
+
+        <div class="panel-actions">
+            <button id="btn-setup-back" class="menu-btn">BACK</button>
+            <button id="btn-setup-fly" class="menu-btn primary">FLY</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ SETTINGS ============ -->
+<div id="settings-screen" class="screen hidden">
+    <div class="panel">
+        <h2>Settings</h2>
+
+        <div class="setup-section">
+            <div class="setup-label">Master Volume</div>
+            <input type="range" min="0" max="1" step="0.01" id="slider-master-volume" class="slider">
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Music Volume</div>
+            <input type="range" min="0" max="1" step="0.01" id="slider-music-volume" class="slider">
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Engine Volume</div>
+            <input type="range" min="0" max="1" step="0.01" id="slider-engine-volume" class="slider">
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Effects Volume</div>
+            <input type="range" min="0" max="1" step="0.01" id="slider-effects-volume" class="slider">
+        </div>
+        <div class="setup-section">
+            <button id="btn-mute" class="menu-btn small">🔊 MUTE</button>
+        </div>
+
+        <div class="setup-section" data-group="graphicsQuality">
+            <div class="setup-label">Graphics Quality</div>
+            <div class="option-row">
+                <div class="option" data-value="low">Low</div>
+                <div class="option" data-value="medium">Medium</div>
+                <div class="option" data-value="high">High</div>
+            </div>
+        </div>
+
+        <div class="setup-section" data-group="renderDistance">
+            <div class="setup-label">Render Distance</div>
+            <div class="option-row">
+                <div class="option" data-value="near">Near</div>
+                <div class="option" data-value="medium">Medium</div>
+                <div class="option" data-value="far">Far</div>
+            </div>
+        </div>
+
+        <div class="setup-section row">
+            <label class="checkbox-row"><input type="checkbox" id="toggle-shadows"> Shadows</label>
+            <label class="checkbox-row"><input type="checkbox" id="toggle-invert-pitch"> Invert Pitch</label>
+        </div>
+
+        <div class="setup-section">
+            <div class="setup-label">Camera Sensitivity</div>
+            <input type="range" min="0.3" max="2" step="0.05" id="slider-camera-sensitivity" class="slider">
+        </div>
+        <div class="setup-section">
+            <div class="setup-label">Flight Sensitivity</div>
+            <input type="range" min="0.3" max="2" step="0.05" id="slider-flight-sensitivity" class="slider">
+        </div>
+
+        <div class="panel-actions">
+            <button id="btn-settings-back" class="menu-btn primary">BACK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ CONTROLS ============ -->
+<div id="controls-screen" class="screen hidden">
+    <div class="panel">
+        <h2>Controls</h2>
+        <div class="controls-grid">
+            <div><b>W / S</b><span>Pitch down / up</span></div>
+            <div><b>A / D</b><span>Roll left / right</span></div>
+            <div><b>Q / E</b><span>Yaw / rudder</span></div>
+            <div><b>&uarr; / &darr;</b><span>Throttle up / down</span></div>
+            <div><b>G</b><span>Landing gear</span></div>
+            <div><b>F</b><span>Flaps</span></div>
+            <div><b>B</b><span>Brakes (hold)</span></div>
+            <div><b>Space</b><span>Parking brake toggle</span></div>
+            <div><b>C</b><span>Change camera</span></div>
+            <div><b>P / Esc</b><span>Pause</span></div>
+            <div><b>R</b><span>Reset flight</span></div>
+            <div><b>`</b><span>Debug overlay</span></div>
+        </div>
+        <p class="note">Gamepad: left stick = pitch/roll, right stick X = rudder, triggers = throttle, A = gear.</p>
+        <div class="panel-actions">
+            <button id="btn-controls-back" class="menu-btn primary">BACK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<div id="about-screen" class="screen hidden">
+    <div class="panel">
+        <h2>About</h2>
+        <p>Skyline Flight is a from-scratch, browser-based 3D flight simulator built with Three.js and WebGL. This is V1: a complete playable foundation (real flight physics, a full airport and terrain, day/night, weather, HUD/cockpit, and audio) designed to be expanded with more aircraft, real-world terrain, navigation, and multiplayer in later versions.</p>
+        <div class="panel-actions">
+            <button id="btn-about-back" class="menu-btn primary">BACK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============ PAUSE MENU ============ -->
+<div id="pause-menu" class="screen hidden">
+    <div class="panel narrow">
+        <h2>Paused</h2>
+        <nav class="menu-nav">
+            <button id="btn-resume" class="menu-btn primary">RESUME</button>
+            <button id="btn-pause-restart" class="menu-btn">RESTART FLIGHT</button>
+            <button id="btn-pause-settings" class="menu-btn">SETTINGS</button>
+            <button id="btn-pause-menu" class="menu-btn">RETURN TO MENU</button>
+        </nav>
+    </div>
+</div>
+
+<!-- ============ CRASH SCREEN ============ -->
+<div id="crash-screen" class="screen hidden">
+    <div class="panel narrow crash">
+        <h2>AIRCRAFT CRASHED</h2>
+        <p id="crash-reason">Flight terminated.</p>
+        <nav class="menu-nav">
+            <button id="btn-crash-restart" class="menu-btn primary">RESTART FLIGHT</button>
+            <button id="btn-crash-menu" class="menu-btn">RETURN TO MENU</button>
+        </nav>
+    </div>
+</div>
+
+<!-- ============ LANDING COMPLETE SCREEN ============ -->
+<div id="landing-screen" class="screen hidden">
+    <div class="panel narrow success">
+        <h2>LANDING COMPLETE</h2>
+        <p>Touchdown speed: <span id="landing-touchdown-speed">0</span> knots</p>
+        <p>Vertical speed: <span id="landing-vs">0</span> fpm</p>
+        <nav class="menu-nav">
+            <button id="btn-landing-again" class="menu-btn primary">FLY AGAIN</button>
+            <button id="btn-landing-menu" class="menu-btn">MAIN MENU</button>
+        </nav>
+    </div>
+</div>
+
+<!-- ============ ERROR SCREEN ============ -->
+<div id="error-screen" class="screen hidden">
+    <div class="panel narrow crash">
+        <h2 id="error-title">LOAD ERROR</h2>
+        <p id="error-message">Something could not be loaded.</p>
+        <nav class="menu-nav">
+            <button id="btn-error-reload" class="menu-btn primary">RELOAD</button>
+        </nav>
+    </div>
+</div>
+
+<!-- ============ IN-FLIGHT HUD ============ -->
+<div id="hud" class="hidden"></div>
+<div id="hud-hint" class="hud-hint hidden">Press ESC or P to pause</div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
