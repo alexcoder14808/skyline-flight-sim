@@ -162,16 +162,17 @@ class SkylineFlightApp {
         document.getElementById('btn-about-back').addEventListener('click', () => this._switchScreen('menu'));
 
         this._settingsReturnState = 'menu';
-        this._setState('menu');
+        this._switchScreen('menu');
     }
 
     _switchScreen(name) {
-        ['main-menu', 'flight-setup-screen', 'settings-screen', 'controls-screen', 'about-screen'].forEach((id) => {
+        ['main-menu', 'flight-setup-screen', 'settings-screen', 'controls-screen', 'about-screen', 'pause-menu'].forEach((id) => {
             document.getElementById(id).classList.add('hidden');
         });
-        const map = { menu: 'main-menu', setup: 'flight-setup-screen', settings: 'settings-screen', controls: 'controls-screen', about: 'about-screen' };
+        const map = { menu: 'main-menu', setup: 'flight-setup-screen', settings: 'settings-screen', controls: 'controls-screen', about: 'about-screen', paused: 'pause-menu' };
         document.getElementById(map[name]).classList.remove('hidden');
         this.state = name;
+        this.controls.enabled = (name === 'paused');
     }
 
     _applySettingsToRenderer(values) {
